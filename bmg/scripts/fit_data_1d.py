@@ -4,14 +4,13 @@ from ..bmg import UBMG
 
 
 data = Data1D(100)
+data.show()
+
 model = UBMG(len(data.clusters), 1.0)
 
-model.fit(data.points)
+elbos = model.fit(data.points, show=True, clusters=data.clusters)
 
-for i in range(100):
-
-    plt.scatter(model.means, [len(data.clusters)] * len(model.means))
-    data.show()
-
-    model.mixture_assignments(data.points)
-    model.means_assignment(data.points)
+plt.plot(list(range(1, len(elbos) + 1)), elbos)
+plt.xlabel("step")
+plt.ylabel("ELBO")
+plt.show()

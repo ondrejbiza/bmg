@@ -26,9 +26,11 @@ class Data1D:
 
             plt.scatter(cluster, [idx] * len(cluster))
 
-        plt.axis("off")
-        plt.xlim(-10.0, 10.0)
+        plt.yticks([])
+        plt.xlim(-12.0, 12.0)
         plt.ylim(-0.5, len(self.clusters) + 1)
+        plt.xlabel("value")
+        plt.ylabel("cluster index")
 
         plt.show()
 
