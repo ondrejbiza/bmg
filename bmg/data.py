@@ -22,6 +22,8 @@ class Data1D:
 
     def show(self):
 
+        plt.title("training data")
+
         for idx, cluster in enumerate(self.clusters):
 
             plt.scatter(cluster, [idx] * len(cluster))

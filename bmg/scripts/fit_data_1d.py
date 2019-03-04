@@ -14,3 +14,11 @@ plt.plot(list(range(1, len(elbos) + 1)), elbos)
 plt.xlabel("step")
 plt.ylabel("ELBO")
 plt.show()
+
+
+points = model.sample(300)
+plt.title("sampled points")
+plt.scatter(points, [0] * len(points))
+plt.yticks([])
+plt.xlabel("value")
+plt.show()

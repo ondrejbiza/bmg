@@ -6,10 +6,10 @@ from scipy.stats import norm
 
 class UBMG:
 
-    def __init__(self, num_components, component_means_var):
+    def __init__(self, num_components, variance):
 
         self.num_components = num_components
-        self.component_means_var = component_means_var
+        self.variance = variance
 
         self.num_samples, self.phis, self.means, self.vars = [None] * 4
 
@@ -59,7 +59,7 @@ class UBMG:
         term1 = self.phis * data[:, np.newaxis]
         term1 = term1.sum(axis=0)
 
-        term2 = 1 / self.component_means_var + self.phis.sum(axis=0)
+        term2 = 1 / self.variance + self.phis.sum(axis=0)
 
         self.means = term1 / term2
         self.vars = 1 / term2
@@ -67,8 +67,8 @@ class UBMG:
     def elbo(self, data):
 
         # prior on the component mean
-        t1 = - (1 / 2) * np.log(2 * np.pi * self.component_means_var) - \
-             (1 / (2 * self.component_means_var)) * (np.square(self.means) + self.vars)
+        t1 = - (1 / 2) * np.log(2 * np.pi * self.variance) - \
+             (1 / (2 * self.variance)) * (np.square(self.means) + self.vars)
         t1 = t1.sum()
 
         # prior on the assignments
@@ -109,3 +109,19 @@ class UBMG:
         plt.xlabel("value")
         plt.ylabel("probability")
         plt.show()
+
+    def sample(self, num_points):
+
+        categories = np.mean(self.phis, axis=0)
+
+        assignments = np.random.choice(list(range(self.num_components)), size=num_points, replace=True, p=categories)
+
+        points = np.empty(num_points, dtype=np.float32)
+
+        for idx in range(self.num_components):
+
+            mask = [assignments == idx]
+            count = np.sum(mask)
+            points[mask] = np.random.normal(self.means[idx], scale=np.sqrt(self.variance), size=count)
+
+        return points
