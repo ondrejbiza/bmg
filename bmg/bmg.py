@@ -96,6 +96,7 @@ class UBMG:
 
     def show(self, clusters):
 
+        plt.title("GMM model")
         colors = sns.color_palette()
 
         for idx, cluster in enumerate(clusters):
